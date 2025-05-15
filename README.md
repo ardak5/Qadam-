@@ -6,6 +6,8 @@ virtual career asisstant
 
 Live Site: [https://ardak5.github.io/Qadam-/](https://ardak5.github.io/Qadam-/)
 
+figma:https://github.com/ardak5/Qadam-
+
 ## Overview
 
 Qadam is a modern web-based career guidance platform that helps users explore suitable professions based on their personality traits and strengths. The system integrates psychological models — **Gallup CliftonStrengths** and **MBTI (16Personalities)** — and uses the **OpenAI GPT-4 API** to generate personalized career suggestions.
@@ -103,3 +105,7 @@ Users can:
 ## License
 
 This project is licensed under the MIT License.
+
+
+
+
