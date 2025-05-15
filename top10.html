@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallup Top 10 Viewer</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #0b0e1a;
+      color: white;
+      display: flex;
+      user-select: none;
+    }
+    .sidebar {
+      width: 250px;
+      background: #111827;
+      padding: 30px 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100vh;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #fff;
+    }
+    .talent-item {
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      background: #1f2937;
+      color: white;
+      border-left: 6px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .talent-item:hover,
+    .talent-item.active {
+      background: #374151;
+    }
+    .executing { border-left-color: #E87302; }
+    .influencing { border-left-color: #7A2684; }
+    .relationship { border-left-color: #2D70B7; }
+    .strategic { border-left-color: #00955E; }
+
+    .content {
+      flex: 1;
+      background: white;
+      color: #000;
+      padding: 30px;
+    }
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #ccc;
+      margin-bottom: 20px;
+    }
+    .tab {
+      margin-right: 20px;
+      padding: 10px 5px;
+      font-weight: bold;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .tab.active {
+      border-color: #3498db;
+      color: #3498db;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .book img {
+      height: 100px;
+    }
+    h1, p, h3, ul, li, a {
+      user-select: none;
+      caret-color: transparent;
+    }
+    .back-btn {
+      background-color: #374151;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+      margin-left: 10px;
+    }
+    .back-btn:hover {
+      background-color: #6c757d;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      margin: 0;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Your Top 10</h2>
+    <div id="talentList"></div>
+    <!-- Back button placed at the bottom of the sidebar -->
+    <button class="back-btn" onclick="window.history.back();">Back</button>
+  </div>
+  <div class="content">
+    <div class="header">
+      <h1 id="talentTitle">Select a Talent</h1>
+    </div>
+    <div class="tabs">
+      <div class="tab active" data-tab="overview">Overview</div>
+      <div class="tab" data-tab="strengths">Strengths</div>
+      <div class="tab" data-tab="blindspots">Blind Spots</div>
+      <div class="tab" data-tab="roles">Ideal Roles</div>
+      <div class="tab" data-tab="book">Book</div>
+      <div class="tab" data-tab="video">Video</div>
+    </div>
+    <div id="overview" class="tab-content active"></div>
+    <div id="strengths" class="tab-content"></div>
+    <div id="blindspots" class="tab-content"></div>
+    <div id="roles" class="tab-content"></div>
+    <div id="book" class="tab-content"></div>
+    <div id="video" class="tab-content"></div>
+  </div>
+
+  <script src="talentsProfile.js"></script>
+  <script>
+    const domainColors = {
+      "Strategic Thinking": "#00955E",
+      "Relationship Building": "#2D70B7",
+      "Executing": "#E87302",
+      "Influencing": "#7A2684"
+    };
+
+    const raw = JSON.parse(localStorage.getItem("selectedTalents") || "[]");
+    const top10 = raw.map(t => t.replace(/[0-9]+$/, "").trim());
+    const list = document.getElementById("talentList");
+    const title = document.getElementById("talentTitle");
+
+    function loadTalent(name) {
+      const t = talentsProfile[name];
+      if (!t) return;
+
+      // Remove active class from previous talent items
+      document.querySelectorAll(".talent-item").forEach(el => el.classList.remove("active"));
+
+      // Set the active class for the current clicked talent item
+      const active = [...document.querySelectorAll(".talent-item")].find(e => e.dataset.name === name);
+      if (active) active.classList.add("active");
+
+      // Set the content for the selected talent
+      title.textContent = "🌟 " + t.overview.title;
+      document.getElementById("overview").innerHTML = `
+        <p>${t.overview.description}</p>
+        <h3>What motivates you:</h3>
+        <ul>${t.motivators.map(m => `<li>${m}</li>`).join("")}</ul>
+        <h3>Where you shine best:</h3>
+        <ul>${t.best_environments.map(e => `<li>${e}</li>`).join("")}</ul>
+        <h3>Growth Tips:</h3>
+        <ul>${t.growth_tips.map(tip => `<li>${tip}</li>`).join("")}</ul>
+        <blockquote><em>“${t.quote}”</em></blockquote>
+      `;
+      document.getElementById("strengths").innerHTML = `<ul>${t.core_qualities.map(s => `<li>${s}</li>`).join("")}</ul>`;
+      document.getElementById("blindspots").innerHTML = `<ul>${t.challenges.map(c => `<li>${c}</li>`).join("")}</ul>`;
+      document.getElementById("roles").innerHTML = `<ul>${t.ideal_roles.map(r => `<li><strong>${r.title}</strong> — ${r.salary}</li>`).join("")}</ul>`;
+      document.getElementById("book").innerHTML = `<p><strong>${t.book.title}</strong> by ${t.book.author}</p><img src="${t.book.cover}" alt="Book cover"/>`;
+      document.getElementById("video").innerHTML = `<p><strong>${t.video.title}</strong></p><a href="${t.video.url}" target="_blank">${t.video.url}</a>`;
+    }
+
+    top10.forEach((talent, index) => {
+      const domain = talentsProfile[talent]?.domain || "Strategic Thinking";
+      const color = domainColors[domain] || "#ccc";
+      const div = document.createElement("div");
+      div.className = `talent-item ${domain}`;
+      div.style.borderLeftColor = color;
+      div.dataset.name = talent;
+      div.textContent = `${index + 1}. ${talent}`;
+      div.addEventListener("click", () => loadTalent(talent));
+      list.appendChild(div);
+    });
+
+    // Tab switching functionality
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+        tab.classList.add("active");
+        document.getElementById(tab.dataset.tab).classList.add("active");
+      });
+    });
+
+    // Load first talent on page load
+    if (top10.length) loadTalent(top10[0]);
+  </script>
+</body>
+</html>

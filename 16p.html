@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <title>Personality Types | 16Personalities</title>
+
+  <!-- Essential CSS for styling Personality Types section -->
+  <link rel="stylesheet" href="https://www.16personalities.com/build/assets/styles-core.inajBj0H.css" />
+  <link rel="stylesheet" href="https://www.16personalities.com/build/assets/styles-fonts.BFvuMJJu.css" />
+  <link rel="stylesheet" href="https://www.16personalities.com/build/assets/type-list.BX-h7OOA.css" />
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" />
+  
+  <style>
+    /* Your existing styles */
+    .type {
+      cursor: pointer;
+      transition:
+        box-shadow 0.3s ease,
+        transform 0.25s ease;
+      outline-offset: 4px;
+      outline: none;
+      border-radius: 12px;
+      position: relative;
+      padding-bottom: 40px; /* space for button */
+    }
+    .type.selected {
+      box-shadow:
+        0 0 15px 4px rgba(108, 99, 255, 0.7),
+        0 0 8px 1px rgba(108, 99, 255, 0.5);
+      transform: scale(1.05);
+      background-color: #f0f0ff;
+    }
+    .type.final-selected {
+      box-shadow:
+        0 0 20px 5px rgba(255, 99, 71, 0.9);
+      transform: scale(1.1);
+      background-color: #fff0f0;
+    }
+    .type:focus-visible {
+      outline: 3px solid #6c63ff;
+      outline-offset: 4px;
+    }
+    /* Completed button style */
+    .complete-btn {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      background-color: #6c63ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      z-index: 10;
+    }
+    .complete-btn:hover {
+      background-color: #5750d8;
+    }
+    /* Show button when ready */
+    .type.show-complete-btn .complete-btn {
+      display: block;
+    }
+
+    /* New header styles */
+    header.find-type-header {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background-color: #fff;
+      font-family: 'Red Hat Display', serif;
+    }
+    header.find-type-header h1 {
+      font-weight: 700;
+      font-size: 2.75rem;
+      color: #2e3148;
+      margin-bottom: 25px;
+    }
+    header.find-type-header button.find-type-btn {
+      background-color: #6c63ff;
+      border: none;
+      border-radius: 30px;
+      padding: 14px 36px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(108, 99, 255, 0.3);
+      transition: background-color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    header.find-type-header button.find-type-btn:hover {
+      background-color: #5750d8;
+    }
+    header.find-type-header button.find-type-btn svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header class="find-type-header">
+    <h1>Personality Types</h1>
+    <button class="find-type-btn" id="findYourTypeBtn" aria-label="Find Your Type">
+      Find Your Type
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M13.172 12l-4.95-4.95 1.414-1.414L16 12l-6.364 6.364-1.414-1.414z"/>
+      </svg>
+    </button>
+  </header>
+
+  <main class="q-tl">
+
+    <!-- Analysts -->
+    <div class="type-group analysts">
+      <svg class="background" aria-hidden="true" viewBox="0 0 1920 155" preserveAspectRatio="none">
+        <polygon class="c1" points="1920 823 0 823 0 0 396 101 835 31 1574 149 1920 17 1920 823"></polygon>
+      </svg>
+      <h2 id="analysts">Analysts</h2>
+      <div class="types" role="list" aria-label="Analysts personality types">
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/intj-personality" data-name="INTJ" aria-label="Architect (INTJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/intj-architect-male.svg?v=3" alt="Architect avatar" />
+          <h4>Architect</h4>
+          <h5>INTJ-A / INTJ-T</h5>
+          <div class="snippet text--bal">Imaginative and strategic thinkers, with a plan for everything.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/intp-personality" data-name="INTP" aria-label="Logician (INTP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/intp-logician-female.svg?v=3" alt="Logician avatar" />
+          <h4>Logician</h4>
+          <h5>INTP-A / INTP-T</h5>
+          <div class="snippet text--bal">Innovative inventors with an unquenchable thirst for knowledge.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/entj-personality" data-name="ENTJ" aria-label="Commander (ENTJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/entj-commander-female.svg?v=3" alt="Commander avatar" />
+          <h4>Commander</h4>
+          <h5>ENTJ-A / ENTJ-T</h5>
+          <div class="snippet text--bal">Bold, imaginative and strong-willed leaders, always finding a way – or making one.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/entp-personality" data-name="ENTP" aria-label="Debater (ENTP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/entp-debater-male.svg?v=3" alt="Debater avatar" />
+          <h4>Debater</h4>
+          <h5>ENTP-A / ENTP-T</h5>
+          <div class="snippet text--bal">Smart and curious thinkers who cannot resist an intellectual challenge.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Diplomats -->
+    <div class="type-group diplomats">
+      <h2 id="diplomats">Diplomats</h2>
+      <div class="types" role="list" aria-label="Diplomats personality types">
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/infj-personality" data-name="INFJ" aria-label="Advocate (INFJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/infj-advocate-male.svg?v=3" alt="Advocate avatar" />
+          <h4>Advocate</h4>
+          <h5>INFJ-A / INFJ-T</h5>
+          <div class="snippet text--bal">Quiet and mystical, yet very inspiring and tireless idealists.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/infp-personality" data-name="INFP" aria-label="Mediator (INFP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/infp-mediator-female.svg?v=3" alt="Mediator avatar" />
+          <h4>Mediator</h4>
+          <h5>INFP-A / INFP-T</h5>
+          <div class="snippet text--bal">Poetic, kind and altruistic people, always eager to help a good cause.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/enfj-personality" data-name="ENFJ" aria-label="Protagonist (ENFJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/enfj-protagonist-male.svg?v=3" alt="Protagonist avatar" />
+          <h4>Protagonist</h4>
+          <h5>ENFJ-A / ENFJ-T</h5>
+          <div class="snippet text--bal">Charismatic and inspiring leaders, able to mesmerize their listeners.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/enfp-personality" data-name="ENFP" aria-label="Campaigner (ENFP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/enfp-campaigner-female.svg?v=3" alt="Campaigner avatar" />
+          <h4>Campaigner</h4>
+          <h5>ENFP-A / ENFP-T</h5>
+          <div class="snippet text--bal">Enthusiastic, creative and sociable free spirits, who can always find a reason to smile.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Sentinels -->
+    <div class="type-group sentinels">
+      <h2 id="sentinels">Sentinels</h2>
+      <div class="types" role="list" aria-label="Sentinels personality types">
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/istj-personality" data-name="ISTJ" aria-label="Logistician (ISTJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/istj-logistician-male.svg?v=3" alt="Logistician avatar" />
+          <h4>Logistician</h4>
+          <h5>ISTJ-A / ISTJ-T</h5>
+          <div class="snippet text--bal">Practical and fact-minded individuals, whose reliability cannot be doubted.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/isfj-personality" data-name="ISFJ" aria-label="Defender (ISFJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/isfj-defender-female.svg?v=3" alt="Defender avatar" />
+          <h4>Defender</h4>
+          <h5>ISFJ-A / ISFJ-T</h5>
+          <div class="snippet text--bal">Very dedicated and warm protectors, always ready to defend their loved ones.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/estj-personality" data-name="ESTJ" aria-label="Executive (ESTJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/estj-executive-female.svg?v=3" alt="Executive avatar" />
+          <h4>Executive</h4>
+          <h5>ESTJ-A / ESTJ-T</h5>
+          <div class="snippet text--bal">Excellent administrators, unsurpassed at managing things – or people.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/esfj-personality" data-name="ESFJ" aria-label="Consul (ESFJ)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/esfj-consul-male.svg?v=3" alt="Consul avatar" />
+          <h4>Consul</h4>
+          <h5>ESFJ-A / ESFJ-T</h5>
+          <div class="snippet text--bal">Extraordinarily caring, social and popular people, always eager to help.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Explorers -->
+    <div class="type-group explorers">
+      <h2 id="explorers">Explorers</h2>
+      <div class="types" role="list" aria-label="Explorers personality types">
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/istp-personality" data-name="ISTP" aria-label="Virtuoso (ISTP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/istp-virtuoso-male.svg?v=3" alt="Virtuoso avatar" />
+          <h4>Virtuoso</h4>
+          <h5>ISTP-A / ISTP-T</h5>
+          <div class="snippet text--bal">Bold and practical experimenters, masters of all kinds of tools.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/isfp-personality" data-name="ISFP" aria-label="Adventurer (ISFP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/isfp-adventurer-female.svg?v=3" alt="Adventurer avatar" />
+          <h4>Adventurer</h4>
+          <h5>ISFP-A / ISFP-T</h5>
+          <div class="snippet text--bal">Flexible and charming artists, always ready to explore and experience something new.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/estp-personality" data-name="ESTP" aria-label="Entrepreneur (ESTP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/estp-entrepreneur-male.svg?v=3" alt="Entrepreneur avatar" />
+          <h4>Entrepreneur</h4>
+          <h5>ESTP-A / ESTP-T</h5>
+          <div class="snippet text--bal">Smart, energetic and very perceptive people, who truly enjoy living on the edge.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+        <a tabindex="0" class="type" href="#" role="listitem" data-link="https://www.16personalities.com/esfp-personality" data-name="ESFP" aria-label="Entertainer (ESFP)">
+          <img class="image" loading="lazy" src="https://www.16personalities.com/static/images/personality-types/avatars/esfp-entertainer-female.svg?v=3" alt="Entertainer avatar" />
+          <h4>Entertainer</h4>
+          <h5>ESFP-A / ESFP-T</h5>
+          <div class="snippet text--bal">Spontaneous, energetic and enthusiastic people – life is never boring around them.</div>
+          <button class="complete-btn">Complete Selection</button>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Кнопка Find Your Type открывает новую вкладку с сайтом 16personalities
+    document.getElementById('findYourTypeBtn').addEventListener('click', () => {
+      window.open('https://www.16personalities.com/', '_blank');
+    });
+
+    const allTypes = document.querySelectorAll('main a.type');
+    const clickCounts = new Map();
+
+    allTypes.forEach(type => {
+      const btn = type.querySelector('.complete-btn');
+
+      btn.style.display = 'none';
+
+      type.addEventListener('mouseenter', () => {
+        if (!type.classList.contains('final-selected')) {
+          type.classList.add('selected');
+        }
+      });
+      type.addEventListener('mouseleave', () => {
+        if (!type.classList.contains('final-selected')) {
+          type.classList.remove('selected');
+        }
+      });
+
+      type.addEventListener('click', e => {
+        e.preventDefault();
+        const count = (clickCounts.get(type) || 0) + 1;
+        clickCounts.set(type, count);
+
+        allTypes.forEach(t => {
+          if (t !== type) {
+            t.classList.remove('selected', 'final-selected');
+            clickCounts.set(t, 0);
+            const otherBtn = t.querySelector('.complete-btn');
+            if (otherBtn) otherBtn.style.display = 'none';
+            t.classList.remove('show-complete-btn');
+          }
+        });
+
+        if (count === 1) {
+          type.classList.add('selected');
+          type.classList.remove('final-selected');
+          if (btn) btn.style.display = 'none';
+        } else if (count === 2) {
+          type.classList.add('selected');
+          type.classList.remove('final-selected');
+          if (btn) {
+            btn.style.display = 'block';
+            btn.focus();
+          }
+          type.classList.add('show-complete-btn');
+        } else if (count === 3) {
+          type.classList.remove('selected');
+          type.classList.add('final-selected');
+          if (btn) btn.style.display = 'none';
+
+          // Сохраняем выбранный MBTI в localStorage
+          localStorage.setItem('mbtiType', type.dataset.name || '');
+
+          window.open(type.dataset.link, '_blank'); // Открываем в новой вкладке
+          clickCounts.set(type, 0);
+        }
+      });
+
+      if (btn) {
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          window.location.href = 'profile.html';
+          clickCounts.set(type, 0);
+          allTypes.forEach(t => {
+            t.classList.remove('selected', 'final-selected', 'show-complete-btn');
+            const b = t.querySelector('.complete-btn');
+            if (b) b.style.display = 'none';
+          });
+        });
+      }
+
+      type.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          type.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

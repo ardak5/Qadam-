@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallup Strengths Selector</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      background: url('gaizka-james-laca-purpleplanet.jpg') no-repeat center center fixed;
+      background-size: 120%;
+      padding: 40px;
+      position: relative;
+      z-index: 0;
+      color: #fff;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('gaizka-james-laca-purpleplanet.jpg') no-repeat center center fixed;
+      background-size: cover;
+      filter: blur(10px);
+      z-index: -1;
+    }
+
+    /* Back to Home button in purple (#3C0078) */
+    .nav-back button {
+      background: linear-gradient(135deg, #3C0078, #2E005E);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 15px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(60, 0, 120, 0.3);
+    }
+    .nav-back button:hover {
+      background: linear-gradient(135deg, #2E005E, #26004A);
+      box-shadow: 0 6px 12px rgba(46, 0, 94, 0.6);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 32px;
+      color: #fff;
+    }
+    .upload-section {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    .upload-section input {
+      color: white;
+    }
+    .delete-icon {
+      margin-left: 10px;
+      background-color: white;
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      font-size: 18px;
+      color: #333;
+      transition: background-color 0.3s;
+    }
+    .delete-icon:hover {
+      background-color: #e74c3c;
+    }
+    .container {
+      background: #fff;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 30px 50px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      border-radius: 8px;
+      color: #333;
+    }
+    .domain {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .domain h3 {
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 16px;
+      border-bottom: 4px solid currentColor;
+      width: 100%;
+    }
+    .executing h3 { color: #7A2684; }
+    .influencing h3 { color: #E87302; }
+    .relationship h3 { color: #2D70B7; }
+    .strategic h3 { color: #00955E; }
+    .talent-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    .talent {
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      color: #333;
+      border-radius: 6px;
+      background: #ede9f7;
+      user-select: none;
+      transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
+      cursor: pointer;
+      position: relative;
+      text-align: center;
+    }
+    .talent:hover {
+      transform: scale(1.04);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, .15);
+    }
+    .executing .talent { background: #ede9f7; }
+    .influencing .talent { background: #f6eedb; }
+    .relationship .talent { background: #e5eafb; }
+    .strategic .talent { background: #dff3e8; }
+    .executing .talent.selected { background: #7A2684; color: #fff; }
+    .influencing .talent.selected { background: #E87302; color: #fff; }
+    .relationship .talent.selected { background: #2D70B7; color: #fff; }
+    .strategic .talent.selected { background: #00955E; color: #fff; }
+    .number {
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 28px;
+      font-weight: 700;
+      color: #000;
+      opacity: 1;
+      pointer-events: none;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    /* Next button in purple (#3C0078) */
+    .next-button {
+      background: linear-gradient(135deg, #3C0078, #2E005E);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      padding: 12px 30px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(60, 0, 120, 0.3);
+      font-weight: 600;
+      user-select: none;
+    }
+    .next-button:hover {
+      background: linear-gradient(135deg, #2E005E, #26004A);
+      box-shadow: 0 6px 12px rgba(46, 0, 94, 0.6);
+    }
+
+    /* Reset and Save buttons remain unchanged */
+    .reset-button,
+    .save-button {
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      padding: 12px 30px;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      font-weight: 600;
+      user-select: none;
+    }
+    .reset-button {
+      background: linear-gradient(135deg, #E94E4E, #C43C3C);
+    }
+    .reset-button:hover {
+      background: linear-gradient(135deg, #C43C3C, #A23232);
+      box-shadow: 0 6px 12px rgba(196,60,60,0.6);
+    }
+    .save-button {
+      background: linear-gradient(135deg, #3CB371, #2E8B57);
+    }
+    .save-button:hover {
+      background: linear-gradient(135deg, #2E8B57, #246B44);
+      box-shadow: 0 6px 12px rgba(46,139,87,0.6);
+    }
+  </style>
+</head>
+<body>
+  <div class="nav-back">
+    <button onclick="goBackHome()">← Back to Home</button>
+  </div>
+  <h1>Gallup CliftonStrengths Selector</h1>
+  <div class="upload-section">
+    <input type="file" id="pdfFile" accept="application/pdf">
+    <button class="delete-icon" id="deleteIcon">🗑️</button>
+  </div>
+  <div class="container">
+    <div class="domain executing">
+      <h3>Executing</h3>
+      <div class="talent-grid">
+        <div class="talent">Achiever</div>
+        <div class="talent">Discipline</div>
+        <div class="talent">Arranger</div>
+        <div class="talent">Focus</div>
+        <div class="talent">Belief</div>
+        <div class="talent">Responsibility</div>
+        <div class="talent">Consistency</div>
+        <div class="talent">Restorative</div>
+        <div class="talent">Deliberative</div>
+      </div>
+    </div>
+    <div class="domain influencing">
+      <h3>Influencing</h3>
+      <div class="talent-grid">
+        <div class="talent">Activator</div>
+        <div class="talent">Maximizer</div>
+        <div class="talent">Command</div>
+        <div class="talent">Self-Assurance</div>
+        <div class="talent">Communication</div>
+        <div class="talent">Significance</div>
+        <div class="talent">Competition</div>
+        <div class="talent">Woo</div>
+      </div>
+    </div>
+    <div class="domain relationship">
+      <h3>Relationship Building</h3>
+      <div class="talent-grid">
+        <div class="talent">Adaptability</div>
+        <div class="talent">Includer</div>
+        <div class="talent">Connectedness</div>
+        <div class="talent">Individualization</div>
+        <div class="talent">Developer</div>
+        <div class="talent">Positivity</div>
+        <div class="talent">Empathy</div>
+        <div class="talent">Relator</div>
+        <div class="talent">Harmony</div>
+      </div>
+    </div>
+    <div class="domain strategic">
+      <h3>Strategic Thinking</h3>
+      <div class="talent-grid">
+        <div class="talent">Analytical</div>
+        <div class="talent">Input</div>
+        <div class="talent">Context</div>
+        <div class="talent">Intellection</div>
+        <div class="talent">Futuristic</div>
+        <div class="talent">Learner</div>
+        <div class="talent">Ideation</div>
+        <div class="talent">Strategic</div>
+      </div>
+    </div>
+  </div>
+  <div class="buttons">
+    <button class="next-button" onclick="goToNext()">Next →</button>
+    <button class="reset-button" onclick="resetSelections()">Reset</button>
+    <button class="save-button" onclick="saveSelections()">Save</button>
+  </div>
+  <script>
+    const talents = document.querySelectorAll('.talent');
+    let selectedOrder = [];
+
+    function updateNumbers() {
+      talents.forEach(talent => {
+        const numberDiv = talent.querySelector('.number');
+        if (numberDiv) talent.removeChild(numberDiv);
+      });
+      selectedOrder.forEach((tal, i) => {
+        const number = document.createElement('div');
+        number.className = 'number';
+        number.textContent = i + 1;
+        tal.appendChild(number);
+      });
+    }
+
+    function resetSelections() {
+      selectedOrder.forEach(talent => {
+        talent.classList.remove('selected');
+        const numberDiv = talent.querySelector('.number');
+        if (numberDiv) talent.removeChild(numberDiv);
+      });
+      selectedOrder = [];
+      localStorage.removeItem('selectedTalents');
+    }
+
+    function saveSelections() {
+      const names = selectedOrder.map(t => t.textContent.trim());
+      localStorage.setItem('selectedTalents', JSON.stringify(names));
+      const saveBtn = document.querySelector('.save-button');
+      saveBtn.textContent = "Saved ✅";
+      setTimeout(() => saveBtn.textContent = "Save", 2000);
+    }
+    function goToNext() {
+      window.location.href = 'top10.html'; 
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = JSON.parse(localStorage.getItem('selectedTalents')) || [];
+      talents.forEach(talent => {
+        if (saved.includes(talent.textContent.trim())) {
+          talent.classList.add('selected');
+          selectedOrder.push(talent);
+        }
+      });
+      updateNumbers();
+    });
+
+    talents.forEach(talent => {
+      talent.addEventListener('click', () => {
+        const isSelected = talent.classList.contains('selected');
+        if (!isSelected && selectedOrder.length >= 10) {
+          alert('You can choose only your 10 top strengths.');
+          return;
+        }
+        if (isSelected) {
+          talent.classList.remove('selected');
+          const numberDiv = talent.querySelector('.number');
+          if (numberDiv) talent.removeChild(numberDiv);
+          selectedOrder = selectedOrder.filter(el => el !== talent);
+        } else {
+          talent.classList.add('selected');
+          selectedOrder.push(talent);
+        }
+        updateNumbers();
+      });
+    });
+
+    document.getElementById('pdfFile').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const fileReader = new FileReader();
+      fileReader.onload = async () => {
+        const typedarray = new Uint8Array(fileReader.result);
+        const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
+        let text = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const content = await page.getTextContent();
+          text += content.items.map(item => item.str).join(' ') + '\n';
+        }
+
+        const match = text.match(/STRENGTHEN(.*?)NAVIGATE/s);
+        if (match) {
+          const lines = match[1].trim().split(/\n|\d+\./).filter(Boolean);
+          const top10 = lines.slice(0, 10).map(l => l.trim());
+          resetSelections();
+          talents.forEach(talent => {
+            const name = talent.textContent.trim();
+            const indexInTop10 = top10.findIndex(t => t.toLowerCase() === name.toLowerCase());
+            if (indexInTop10 !== -1) {
+              talent.classList.add('selected');
+              selectedOrder[indexInTop10] = talent;
+            }
+          });
+          selectedOrder = selectedOrder.filter(Boolean);
+          updateNumbers();
+        } else {
+          alert('Could not find the STRENGTHEN section in the document.');
+        }
+      };
+      fileReader.readAsArrayBuffer(file);
+    });
+
+    document.getElementById('deleteIcon').addEventListener('click', () => {
+      document.getElementById('pdfFile').value = '';
+      resetSelections();
+      alert("File and results have been cleared 🗑️");
+    });
+
+    function goBackHome() {
+      window.location.href = 'profile.html';
+    }
+  </script>
+</body>
+</html>

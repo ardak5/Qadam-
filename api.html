@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Your online virtual career assistant</title>
+  <style>
+    /* Сброс стилей */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, hsl(283, 93%, 49%) 50%, #2575fc 100%);
+      color: #f0f0f0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 30px 40px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #e0e0e0;
+    }
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 12px 15px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    input[type="text"]::placeholder {
+      color: #ddd;
+    }
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      box-shadow: 0 0 10px #8a2be2;
+      background: rgba(255, 255, 255, 0.3);
+      color: #000;
+    }
+    button {
+      width: 100%;
+      margin-top: 30px;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      background: #8a2be2;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background: #6d1aab;
+    }
+    #mbtiSelected {
+      margin-top: 20px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      text-align: center;
+      color: #fff;
+    }
+    #result {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 1rem;
+      white-space: pre-wrap;
+      max-height: 300px;
+      overflow-y: auto;
+      color: #fff;
+      line-height: 1.5;
+    }
+    .error {
+      color: #ff6b6b;
+      font-weight: 700;
+      margin-top: 15px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Online virtual career assistant</h1>
+
+    <label for="gallupInput">Топ 10 талантов Gallup (через запятую):</label>
+    <input
+      id="gallupInput"
+      type="text"
+      placeholder="Например: Achiever, Strategic, Learner, Communication, Responsibility..."
+      autocomplete="off"
+    />
+
+    <label for="personalityInput">Выберите тип MBTI:</label>
+    <select id="personalityInput">
+      <option value="" disabled selected>Выберите тип</option>
+      <option value="INFJ">INFJ</option>
+      <option value="ENFP">ENFP</option>
+      <option value="ISTJ">ISTJ</option>
+      <option value="ESTP">ESTP</option>
+      <option value="INTJ">INTJ</option>
+      <option value="ISFJ">ISFJ</option>
+      <option value="ESFJ">ESFJ</option>
+      <option value="INFP">INFP</option>
+      <option value="ENFJ">ENFJ</option>
+      <option value="ISTP">ISTP</option>
+      <option value="ISFP">ISFP</option>
+      <option value="ESTJ">ESTJ</option>
+      <option value="ESFP">ESFP</option>
+      <option value="INTP">INTP</option>
+      <option value="ENTP">ENTP</option>
+      <option value="ENTJ">ENTJ</option>
+    </select>
+
+    <button id="submitBtn">Получить рекомендации</button>
+
+    <div id="mbtiSelected"></div>
+
+    <div id="result"></div>
+  </div>
+
+<script>
+  const btn = document.getElementById('submitBtn');
+  const result = document.getElementById('result');
+  const mbtiSelected = document.getElementById('mbtiSelected');
+  const gallupInput = document.getElementById('gallupInput');
+  const personalityInput = document.getElementById('personalityInput');
+
+  // ВАЖНО: вставь сюда свой ключ OpenAI API
+  const OPENAI_API_KEY = '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';
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedTalents = localStorage.getItem('selectedTalents');
+    const savedMbti = localStorage.getItem('selectedMbti');
+
+    if (savedTalents) {
+      const talentsClean = JSON.parse(savedTalents).map(talent => talent.replace(/\d+$/, '').trim());
+      gallupInput.value = talentsClean.join(', ');
+    }
+    if (savedMbti) {
+      personalityInput.value = savedMbti;
+      mbtiSelected.textContent = `Выбранный тип MBTI: ${savedMbti}`;
+    }
+  });
+
+  btn.addEventListener('click', async () => {
+    result.textContent = '';
+    mbtiSelected.textContent = '';
+
+    const talentsRaw = gallupInput.value.trim();
+    const mbti = personalityInput.value;
+
+    if (!talentsRaw || !mbti) {
+      result.innerHTML = '<div class="error">Пожалуйста, заполните все поля корректно.</div>';
+      return;
+    }
+
+    const talents = talentsRaw.split(',').map(t => t.trim()).filter(t => t.length > 0);
+
+    if (talents.length !== 10) {
+      result.innerHTML = '<div class="error">Введите ровно 10 талантов, разделённых запятыми.</div>';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Загрузка...';
+
+    try {
+      const messages = [
+        {
+          role: 'system',
+          content: 'Ты — помощник по профориентации. Помоги подобрать профессии на основе талантов Gallup и типа MBTI.'
+        },
+        {
+          role: 'user',
+          content: `Gallup talents: ${talents.join(', ')}. MBTI: ${mbti}. Порекомендуй подходящие профессии.`
+        }
+      ];
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${'YOUR_API_KEY'}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',  // или 'gpt-4o' или другой доступный
+          messages: messages,
+          temperature: 0.7,
+          max_tokens: 500,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || 'Ошибка API OpenAI');
+      }
+
+      const data = await response.json();
+
+      mbtiSelected.textContent = `Выбранный тип MBTI: ${mbti}`;
+      result.textContent = data.choices[0].message.content;
+
+      const talentsToSave = talents.map(talent => talent.replace(/\d+$/, '').trim());
+      localStorage.setItem('selectedTalents', JSON.stringify(talentsToSave));
+      localStorage.setItem('selectedMbti', mbti);
+
+    } catch (err) {
+      result.innerHTML = `<div class="error">Ошибка: ${err.message}</div>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Получить рекомендации';
+    }
+  });
+</script>
+
+</body>
+</html>

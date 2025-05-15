@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Library - ADAM</title>
+  <style>
+    body {
+      background-color: #010916;
+      color: #fff;
+      font-family: 'Saira', Helvetica, sans-serif;
+      padding: 40px;
+      margin: 0;
+    }
+    a.back-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background: #7c2cce;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 0 10px #7c2cce;
+      transition: background 0.3s ease, transform 0.2s ease;
+      user-select: none;
+    }
+    a.back-button:hover {
+      background: #a44de6;
+      transform: scale(1.05);
+    }
+    h1 {
+      font-size: 48px;
+      margin-bottom: 30px;
+      color: #e1bbfb;
+    }
+
+    .library-container {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .library-scroll-wrapper {
+      display: flex;
+      gap: 30px;
+      animation: scroll-left 20s linear infinite;
+    }
+
+    .library-card {
+      flex: 0 0 250px;
+      background: linear-gradient(135deg, #7c2cce, #e1bbfb);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 15px #7c2cce;
+      text-align: center;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+      color: #ddd;
+    }
+    .library-card:hover {
+      transform: scale(1.05);
+      color: white;
+    }
+    .library-card h2 {
+      margin: 0 0 10px 0;
+      font-weight: 600;
+      color: #fff;
+    }
+    .library-card p {
+      font-weight: 400;
+    }
+
+    @keyframes scroll-left {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(calc(-250px * 7 - 30px * 7));
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="main.html" class="back-button">← Back to Main Page</a>
+
+  <h1>Welcome to QADAM Library</h1>
+  <div class="library-container">
+    <div class="library-scroll-wrapper">
+      <!-- 7 unique cards -->
+      <div class="library-card">
+        <h2>Books</h2>
+        <p>Explore a curated collection of career and psychology books.</p>
+      </div>
+      <div class="library-card">
+        <h2>Podcasts</h2>
+        <p>Listen to expert talks and inspiring career stories.</p>
+      </div>
+      <div class="library-card">
+        <h2>Researches</h2>
+        <p>Access latest studies and insights on personality and careers.</p>
+      </div>
+      <div class="library-card">
+        <h2>Workshops</h2>
+        <p>Join live sessions and skill-building workshops.</p>
+      </div>
+      <div class="library-card">
+        <h2>Webinars</h2>
+        <p>Attend interactive webinars to boost your skills.</p>
+      </div>
+      <div class="library-card">
+        <h2>Articles</h2>
+        <p>Read expert articles on career development and psychology.</p>
+      </div>
+      <div class="library-card">
+        <h2>Videos</h2>
+        <p>Watch tutorials and inspiring career videos.</p>
+      </div>
+
+      <!-- Duplicate cards for seamless scrolling -->
+      <div class="library-card">
+        <h2>Books</h2>
+        <p>Explore a curated collection of career and psychology books.</p>
+      </div>
+      <div class="library-card">
+        <h2>Podcasts</h2>
+        <p>Listen to expert talks and inspiring career stories.</p>
+      </div>
+      <div class="library-card">
+        <h2>Researches</h2>
+        <p>Access latest studies and insights on personality and careers.</p>
+      </div>
+      <div class="library-card">
+        <h2>Workshops</h2>
+        <p>Join live sessions and skill-building workshops.</p>
+      </div>
+      <div class="library-card">
+        <h2>Webinars</h2>
+        <p>Attend interactive webinars to boost your skills.</p>
+      </div>
+      <div class="library-card">
+        <h2>Articles</h2>
+        <p>Read expert articles on career development and psychology.</p>
+      </div>
+      <div class="library-card">
+        <h2>Videos</h2>
+        <p>Watch tutorials and inspiring career videos.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

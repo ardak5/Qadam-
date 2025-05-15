@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gallup Space | Login & Sign Up</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+    body {
+      background: url('gaizka-james-laca-purpleplanet.jpg') no-repeat center center fixed;
+      background-size: 110%;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .navbar {
+      width: 100%;
+      padding: 10px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+      backdrop-filter: blur(6px);
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo img {
+      display: block;
+      height: 40px;
+    }
+    .navbar .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .navbar .logo span {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      color: white;
+      line-height: 1;
+      margin-right: 25px;
+    }
+    .navbar .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .navbar button {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .navbar button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+    .container {
+      width: 420px;
+      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .container.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    #login-box {
+      z-index: 2;
+      top: 150px; /* stays lower */
+    }
+    #signup-box {
+      z-index: 1;
+      top: 80px;  /* moved upward */
+    }
+    .slide-left-out {
+      transform: translateX(-150%) !important;
+      opacity: 0;
+    }
+    .slide-right-in {
+      transform: translateX(-50%) !important;
+      opacity: 1;
+    }
+    .slide-right-out {
+      transform: translateX(150%) !important;
+      opacity: 0;
+    }
+    .slide-left-in {
+      transform: translateX(-50%) !important;
+      opacity: 1;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    input,
+    select {
+      height: 45px;
+      border-radius: 30px;
+      border: none;
+      padding: 0 20px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 14px;
+    }
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    select option {
+      background-color: #222;
+      color: white;
+    }
+    .gender-options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .gender-options label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    button[type="submit"] {
+      height: 45px;
+      border-radius: 30px;
+      border: none;
+      background: rgba(255, 255, 255, 0.7);
+      color: black;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button[type="submit"]:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    .toggle {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    .toggle a {
+      color: #fff;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    #login-message {
+      margin-top: 10px;
+      font-weight: 700;
+      text-align: center;
+      font-size: 14px;
+    }
+    /* Password toggle styling */
+    .password-wrapper {
+      position: relative;
+    }
+    .password-wrapper input {
+      width: 100%;
+      padding-right: 40px;
+      border-radius: 30px;
+    }
+    .password-wrapper span {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      user-select: none;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="logo">
+      <img src="C:\Users\user\Downloads\image 3.png", alt="Q" style="height: 45px; display: block;" />
+      <span>ADAM</span>
+    </div>
+
+    <div class="nav-buttons">
+      <button onclick="showLogin()">Sign In</button>
+      <button onclick="showSignUp()">Sign Up</button>
+    </div>
+  </div>
+
+  <div class="container show" id="login-box">
+    <h2>Login to Gallup Space</h2>
+    <form id="login-form">
+      <input type="text" id="login-email" placeholder="Username or Email" required>
+      <div class="password-wrapper">
+        <input type="password" id="login-password" placeholder="Password" required>
+        <span onclick="togglePassword('login-password', this)"></span>
+      </div>
+      <button type="submit">Sign In</button>
+      <div id="login-message"></div>
+    </form>
+    <div class="toggle">Don't have an account? <a onclick="showSignUp()">Sign Up</a></div>
+  </div>
+
+  <div class="container" id="signup-box">
+    <h2>Discover Your Stellar Strengths</h2>
+    <form id="signup-form">
+      <input type="text" id="signup-name" placeholder="Name" required>
+      <div class="password-wrapper">
+        <input type="password" id="signup-password" placeholder="Password" required>
+        <span onclick="togglePassword('signup-password', this)"></span>
+      </div>
+      <input type="email" id="signup-email" placeholder="Email" required>
+      <input type="number" id="signup-age" placeholder="Age" required>
+      <div class="gender-options">
+        <label><input type="radio" name="gender" value="male" required> Male</label>
+        <label><input type="radio" name="gender" value="female" required> Female</label>
+      </div>
+      <select id="signup-education" required>
+        <option value="">Education</option>
+        <option value="school">School</option>
+        <option value="college">College</option>
+        <option value="university">University</option>
+      </select>
+      <select id="signup-industry" required>
+        <option value="">Working Area</option>
+        <option value="it">IT</option>
+        <option value="education">Education</option>
+        <option value="science">Science</option>
+        <option value="other">Other</option>
+      </select>
+      <button type="submit">Next →</button>
+    </form>
+    <div class="toggle">Already have an account? <a onclick="showLogin()">Sign In</a></div>
+  </div>
+
+  <script>
+    function showSignUp() {
+      const loginBox = document.getElementById('login-box');
+      const signupBox = document.getElementById('signup-box');
+
+      loginBox.classList.remove('slide-left-in', 'show');
+      signupBox.classList.remove('slide-right-out');
+
+      loginBox.classList.add('slide-left-out');
+      signupBox.classList.add('slide-right-in', 'show');
+    }
+
+    function showLogin() {
+      const loginBox = document.getElementById('login-box');
+      const signupBox = document.getElementById('signup-box');
+
+      signupBox.classList.remove('slide-right-in', 'show');
+      loginBox.classList.remove('slide-left-out');
+
+      signupBox.classList.add('slide-right-out');
+      loginBox.classList.add('slide-left-in', 'show');
+    }
+
+    function togglePassword(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === "password") {
+        input.type = "text";
+        
+      } else {
+        input.type = "password";
+       
+      }
+    }
+
+    document.getElementById("signup-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      localStorage.setItem("user_name", document.getElementById("signup-name").value);
+      localStorage.setItem("user_password", document.getElementById("signup-password").value);
+      localStorage.setItem("user_email", document.getElementById("signup-email").value);
+      localStorage.setItem("user_age", document.getElementById("signup-age").value);
+      localStorage.setItem("user_gender", document.querySelector('input[name="gender"]:checked').value);
+      localStorage.setItem("user_education", document.getElementById("signup-education").value);
+      localStorage.setItem("user_industry", document.getElementById("signup-industry").value);
+      alert("✅ Registration successful!");
+      showLogin();
+    });
+
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+      const savedEmail = localStorage.getItem("user_email");
+      const savedPass = localStorage.getItem("user_password");
+      const message = document.getElementById("login-message");
+      if (email === savedEmail && password === savedPass) {
+        message.style.color = "lightgreen";
+        message.textContent = "✅ Login successful! Redirecting...";
+        setTimeout(() => {
+          window.location.href = "main.html";
+        }, 1500);
+      } else {
+        message.style.color = "salmon";
+        message.textContent = "❌ Invalid email or password!";
+      }
+    });
+  </script>
+</body>
+</html>

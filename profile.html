@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Boxicons CSS -->
+  <link href="https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css" rel="stylesheet" />
+  <style>
+    /* Google Font Import - Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --body-color: #E4E9F7;
+      --sidebar-color: #fff;
+      --primary-color: #695CFE;
+      --primary-color-light: #F6F5FF;
+      --toggle-color: #DDD;
+      --text-color: #707070;
+      --scrollbar-bg: #ccc;
+      --scrollbar-thumb: #695CFE;
+      --link-hover-bg: #695CFE;
+      --link-hover-text: #fff;
+      --active-bg: #574FBD; /* Slightly darker for active link */
+    }
+
+    body {
+      height: 100vh;
+      background: var(--body-color);
+      display: flex;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+
+    body.dark {
+      --body-color: #18191A;
+      --sidebar-color: #242526;
+      --primary-color: #3A3B3C;
+      --primary-color-light: #3A3B3C;
+      --toggle-color: #FFF;
+      --text-color: #CCC;
+      background: var(--body-color);
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 250px;
+      padding: 10px 14px;
+      background: var(--sidebar-color);
+      overflow-y: hidden; /* NO scrollbar */
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+      user-select: none;
+    }
+
+    .sidebar .image-text img {
+      width: 40px;
+      border-radius: 6px;
+    }
+
+    .sidebar header {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar header .image-text {
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar .text {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-color);
+      white-space: nowrap;
+      margin-left: 10px;
+    }
+
+    .header-text .name {
+      font-weight: 600;
+    }
+
+    .header-text .profession {
+      font-size: 14px;
+      color: #999;
+    }
+
+    /* Sidebar menu links */
+    .sidebar li {
+      height: 50px;
+      margin-top: 10px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .sidebar li .icon {
+      font-size: 20px;
+      min-width: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+      transition: color 0.3s ease;
+    }
+
+    .sidebar li .text {
+      color: var(--text-color);
+      transition: color 0.3s ease;
+    }
+
+    /* Use background highlight instead of vertical bar */
+    .sidebar li a {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      width: 100%;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+      position: relative;
+      padding-left: 10px;
+      border-left: none;
+    }
+
+    .sidebar li a:hover {
+      background: var(--link-hover-bg);
+      color: var(--link-hover-text);
+    }
+
+    .sidebar li a:hover .icon,
+    .sidebar li a:hover .text {
+      color: var(--link-hover-text);
+    }
+
+    /* Simulate active link styling */
+    .sidebar li a.active {
+      background: var(--active-bg);
+      color: var(--link-hover-text);
+    }
+
+    .sidebar li a.active .icon,
+    .sidebar li a.active .text {
+      color: var(--link-hover-text);
+    }
+
+    .sidebar .search-box {
+      background: var(--primary-color-light);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      height: 40px;
+    }
+
+    .search-box input {
+      height: 100%;
+      width: 100%;
+      outline: none;
+      border: none;
+      background: var(--primary-color-light);
+      padding-left: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+
+    /* Content area */
+    #content-area {
+      margin-left: 250px;
+      padding: 30px;
+      height: 100vh;
+      overflow-y: auto;
+      flex-grow: 1;
+      background: white;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+      transition: background 0.3s ease;
+    }
+
+    body.dark #content-area {
+      background: #2b2b2b;
+      color: #ddd;
+    }
+
+    /* Scrollbar styling for content-area */
+    #content-area::-webkit-scrollbar {
+      width: 8px;
+    }
+    #content-area::-webkit-scrollbar-track {
+      background: var(--scrollbar-bg);
+    }
+    #content-area::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb);
+      border-radius: 20px;
+    }
+
+    /* Buttons inside content */
+    #content-area button {
+      background: var(--primary-color);
+      border: none;
+      padding: 10px 16px;
+      color: white;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+    #content-area button:hover {
+      background: #5a50d8;
+    }
+  </style>
+
+  <title>Custom Sidebar with Active Highlight and Specialists Icon</title>
+</head>
+<body>
+  <nav class="sidebar" aria-label="Sidebar Navigation">
+    <header>
+      <div class="image-text">
+        <span class="image">
+          <img src="C:\Users\Lenovo\Downloads\5273908441930395506.jpg" alt="logo" />
+        </span>
+        <div class="text header-text">
+          <span class="name">Aikun</span>
+          <span class="profession">Aikun</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="menu-bar">
+      <div class="menu">
+        <ul class="menu-links" role="menu">
+          <li class="search-box">
+            <i class="bx bx-search icon" aria-hidden="true"></i>
+            <input type="search" placeholder="Search..." aria-label="Search menu" />
+          </li>
+          <li class="nav-link" role="none">
+            <a href="#" id="dashboard-link" role="menuitem" tabindex="0" class="active">
+              <i class="bx bx-grid-alt icon" aria-hidden="true"></i>
+              <span class="text nav-text">Dashboard</span>
+            </a>
+          </li>
+          <li class="nav-link" role="none">
+            <!-- Changed href to actual page for navigation -->
+            <a href="strengths.html" id="gallup-test" role="menuitem" tabindex="0">
+              <i class="bx bx-line-chart icon" aria-hidden="true"></i>
+              <span class="text nav-text">Gallup Test</span>
+            </a>
+          </li>
+          <li class="nav-link" role="none">
+            <a href="16p.html" id="personality-16" role="menuitem" tabindex="0">
+              <i class="bx bx-user-circle icon" aria-hidden="true"></i>
+              <span class="text nav-text">16 Personalities</span>
+            </a>
+          </li>
+          <li class="nav-link" role="none">
+            <a href="#" id="tests" role="menuitem" tabindex="0">
+              <i class="bx bx-spreadsheet icon" aria-hidden="true"></i>
+              <span class="text nav-text">Tests</span>
+            </a>
+          </li>
+          <li class="nav-link" role="none">
+            <a href="#" id="virtual-career" role="menuitem" tabindex="0">
+              <i class="bx bx-briefcase icon" aria-hidden="true"></i>
+              <span class="text nav-text">Virtual Career Specialist</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content-area" tabindex="-1">
+  <h2><a href="16p.html" style="text-decoration:none; color:inherit;">Welcome!</a></h2>
+  <p>
+    <a href="16p.html" style="text-decoration:none; color:inherit;">
+      Click on the sidebar menu to see your results and info here.
+    </a>
+  </p>
+</main>
+
+
+  <script>
+    const contentArea = document.getElementById('content-area');
+    const links = document.querySelectorAll('.menu-links a');
+
+    // Helper to clear active class on all links
+    function clearActive() {
+      links.forEach(link => link.classList.remove('active'));
+    }
+
+    links.forEach(link => {
+      link.addEventListener('click', e => {
+        // Let Gallup Test link navigate normally
+        if (link.id === 'gallup-test') {
+          return; // no preventDefault, go to strengths.html
+        }
+
+        e.preventDefault();
+        clearActive();
+        link.classList.add('active');
+
+        switch(link.id) {
+          case 'dashboard-link':
+            contentArea.innerHTML = `
+              <h2>Dashboard</h2>
+              <p>Welcome to the dashboard overview.</p>
+            `;
+            break;
+          case 'personality-16':
+            contentArea.innerHTML = `
+              <h2>16 Personalities Results</h2>
+              <p><a href="16p.html" style="text-decoration:none; color:inherit;">Here are your 16 Personalities test results...</a></p>
+            `;
+            break;
+          case 'tests':
+            contentArea.innerHTML = `
+              <h2>More Tests</h2>
+              <ul>
+                <li><a href="#">Test A</a></li>
+                <li><a href="#">Test B</a></li>
+                <li><a href="#">Test C</a></li>
+              </ul>
+            `;
+            break;
+          case 'virtual-career':
+            contentArea.innerHTML = `
+              <h2>Virtual Career Specialist</h2>
+              <p>Your Gallup result taken.</p>
+              <p>16 Personality test result taken.</p>
+              <p>Congratulations! You get access to the Virtual Career Specialist.</p>
+              <button id="get-professions-btn"><a href="file:///C:/Users/user/career-bot/api.html" style="text-decoration:none; color:inherit;">
+     Get Professions
+    </a></button>
+              <div id="professions-info" style="margin-top: 10px;"></div>
+            `;
+
+            
+            break;
+          default:
+            contentArea.innerHTML = `<h2>Welcome!</h2><p>Click on the sidebar menu to see your results and info here.</p>`;
+        }
+        contentArea.focus();
+      });
+    });
+  </script>
+</body>
+</html>
